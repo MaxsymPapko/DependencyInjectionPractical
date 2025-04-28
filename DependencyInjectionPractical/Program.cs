@@ -3,23 +3,32 @@ class Program
 {
     static void Main(string[] args)
     {
-        ILoger logger = new ConsoleLoger();
-        Application app = new Application(logger);
+        var mockLoger = new MockLoger();
+        Application app = new Application(mockLoger);
         app.Run();
+        Console.WriteLine("Logged messages: ");
+        foreach (var message in mockLoger.Messages)
+        {
+            Console.WriteLine("- "+message);
+        }
     }
 }
 
 public interface ILoger
 {
     void Log(string message);
+    
 }
 
-public class ConsoleLoger : ILoger
+public class MockLoger : ILoger
 {
+    public List<string>Messages = new List<string>();
     public void Log(string message)
     {
-        Console.WriteLine($"[LOG]:{message}");
+        Messages.Add(message);
     }
+
+    
 }
 
 public class Application
